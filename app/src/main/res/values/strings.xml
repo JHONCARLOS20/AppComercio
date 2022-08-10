@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Restaurante Victoria</string>
+    <string name="description_img_photo">imagen del comercio</string>
+    <string name="description_comercio_add">Crear comercio</string>
+</resources>
