@@ -3,6 +3,7 @@ package pe.idat
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -52,12 +53,22 @@ class ComercioFragment : Fragment()
                 uiThread {
                     with(mBinding)
                     {
+                        /*
                         ietName.setText(mComercioEntity?.nombre)
                         ietprice.setText(mComercioEntity?.precio)
                         ietCantidad.setText(mComercioEntity?.cantidad)
                         ietPhone.setText(mComercioEntity?.telefono)
                         ietDireccion.setText(mComercioEntity?.direccion)
                         ietPhotoUrl.setText(mComercioEntity?.photoUrl)
+                        */
+
+                        //buenas practicas
+                        ietName.text=mComercioEntity?.nombre?.editable()
+                        ietprice.text=mComercioEntity?.precio?.editable()
+                        ietCantidad.text=mComercioEntity?.cantidad?.editable()
+                        ietPhone.text=mComercioEntity?.telefono?.editable()
+                        ietDireccion.text=mComercioEntity?.direccion?.editable()
+                        ietPhotoUrl.text=mComercioEntity?.photoUrl?.editable()
 
                         /*
                         Glide.with(activity!!)
@@ -175,5 +186,10 @@ class ComercioFragment : Fragment()
         {
             imm.hideSoftInputFromWindow(view!!.windowToken,0)
         }
+    }
+
+    //buenas practicas
+    private fun String.editable(): Editable {
+        return Editable.Factory.getInstance().newEditable(this)
     }
 }
