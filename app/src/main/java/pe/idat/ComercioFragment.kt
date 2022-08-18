@@ -2,8 +2,11 @@ package pe.idat
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 import pe.idat.databinding.FragmentComercioBinding
 
 //Escenario para el diseño de la vista Registrar y Editar
@@ -25,6 +28,15 @@ class ComercioFragment : Fragment()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?)
     {
         super.onViewCreated(view, savedInstanceState)
+
+        val productoId=arguments?.getLong("keyId",0)
+
+        if(productoId!= null && productoId!=0L){
+            Toast.makeText(activity,productoId.toString(),Toast.LENGTH_SHORT).show()
+        }
+        else {
+            Toast.makeText(activity,productoId.toString(),Toast.LENGTH_SHORT).show()
+        }
 
         mActivity = activity as? MainActivity
 
@@ -58,7 +70,20 @@ class ComercioFragment : Fragment()
 
             R.id.action_save -> {
                 //code para el boton save
-                Snackbar.make(mBinding.root,getString(R.string.comercio_save),Snackbar.LENGTH_SHORT).show()
+
+                val comercio=ComercioEntity(nombre = mBinding.ietName.text.toString().trim(),
+                                            precio = mBinding.ietprice.text.toString().trim(),
+                                            cantidad = mBinding.ietCantidad.text.toString().trim(),
+                                            telefono = mBinding.ietPhone.text.toString().trim(),
+                                            direccion = mBinding.ietDireccion.text.toString().trim())
+
+                doAsync {
+                    ComercioApplication.database.ComercioDao().insertDB(comercio)
+
+                    uiThread {
+                        Snackbar.make(mBinding.root,getString(R.string.comercio_save),Snackbar.LENGTH_SHORT).show()
+                    }
+                }
                 true
             }
 

@@ -9,7 +9,7 @@ import pe.idat.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), OnClickListener
 {
-    public lateinit var mBinding:ActivityMainBinding
+    lateinit var mBinding:ActivityMainBinding
     private lateinit var mAdapter:ComercioAdapter
     private lateinit var mGridLayout:GridLayoutManager
 
@@ -60,8 +60,12 @@ class MainActivity : AppCompatActivity(), OnClickListener
         }
     }
 
-    override fun onClick(comercioEntity: ComercioEntity) {
-        //code...
+    override fun onClick(comercioEntity: ComercioEntity)
+    {
+        val bundle=Bundle()
+        bundle.putLong("keyId",comercioEntity.productoId)
+
+        launchFragment(bundle)
     }
 
     override fun onClickFavorite(comercioEntity: ComercioEntity)
@@ -89,9 +93,14 @@ class MainActivity : AppCompatActivity(), OnClickListener
     }
 
     //Lanzar Fragmento
-    private fun launchFragment()
+    private fun launchFragment(bundle: Bundle?=null)
     {
         val fragment=ComercioFragment()
+
+        if(bundle!=null){
+            fragment.arguments=bundle
+        }
+
         val fragmentManager=supportFragmentManager
         val fragmentTransaction=fragmentManager.beginTransaction()
 
@@ -108,18 +117,3 @@ class MainActivity : AppCompatActivity(), OnClickListener
         mBinding.fabComercio.hide()
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
