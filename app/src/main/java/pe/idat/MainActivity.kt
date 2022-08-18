@@ -98,6 +98,9 @@ class MainActivity : AppCompatActivity(), OnClickListener
         //transaccion para el fragmentos
         fragmentTransaction.add(R.id.containerMain,fragment)
 
+        //volver fragmento principal
+        fragmentTransaction.addToBackStack(null)
+
         //transaccion que aplique los cambios
         fragmentTransaction.commit()
 

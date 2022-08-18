@@ -11,4 +11,6 @@
     <string name="hint_Cantidad">Cantidad</string>
     <string name="hint_Direccion">Direccion</string>
     <string name="hint_photo_url">Url de la Imagen</string>
+    <string name="comercio_title_add">Crear Plato</string>
+    <string name="menu_save">Save</string>
 </resources>
