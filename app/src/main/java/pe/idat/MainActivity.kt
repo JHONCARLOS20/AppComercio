@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity(), OnClickListener
         mBinding=ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
 
+        /*
         //evento del Button
         mBinding.btnSave.setOnClickListener {
             val comercio=ComercioEntity(nombre  =mBinding.etName.text.toString().trim())
@@ -31,6 +32,12 @@ class MainActivity : AppCompatActivity(), OnClickListener
             }.start()
 
             mAdapter.insertMemory(comercio)
+        }
+         */
+
+        //evento del boton flotante
+        mBinding.fabComercio.setOnClickListener {
+            launchFragment()
         }
 
         //configurar el RecyclerView
@@ -79,6 +86,23 @@ class MainActivity : AppCompatActivity(), OnClickListener
                 mAdapter.deleteMemory(comercioEntity)
             }
         }
+    }
+
+    //Lanzar Fragmento
+    private fun launchFragment()
+    {
+        val fragment=ComercioFragment()
+        val fragmentManager=supportFragmentManager
+        val fragmentTransaction=fragmentManager.beginTransaction()
+
+        //transaccion para el fragmentos
+        fragmentTransaction.add(R.id.containerMain,fragment)
+
+        //transaccion que aplique los cambios
+        fragmentTransaction.commit()
+
+        //ocultar boton flotante
+        mBinding.fabComercio.hide()
     }
 }
 
