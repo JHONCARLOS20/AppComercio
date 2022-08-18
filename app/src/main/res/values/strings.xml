@@ -13,4 +13,5 @@
     <string name="hint_photo_url">Url de la Imagen</string>
     <string name="comercio_title_add">Crear Plato</string>
     <string name="menu_save">Save</string>
+    <string name="comercio_save">¡Plato Registrado Exitosamente!</string>
 </resources>

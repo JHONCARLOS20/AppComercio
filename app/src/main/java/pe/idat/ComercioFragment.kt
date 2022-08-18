@@ -3,12 +3,14 @@ package pe.idat
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import com.google.android.material.snackbar.Snackbar
 import pe.idat.databinding.FragmentComercioBinding
 
 //Escenario para el diseño de la vista Registrar y Editar
 class ComercioFragment : Fragment()
 {
     private lateinit var mBinding: FragmentComercioBinding
+    private var mActivity:MainActivity?=null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,13 +26,13 @@ class ComercioFragment : Fragment()
     {
         super.onViewCreated(view, savedInstanceState)
 
-        val activity = activity as? MainActivity
+        mActivity = activity as? MainActivity
 
         //mostrar flecha de retroceso
-        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         //mostrar titulo
-        activity?.supportActionBar?.title=getString(R.string.comercio_title_add)
+        mActivity?.supportActionBar?.title=getString(R.string.comercio_title_add)
 
         //acceso al menu
         setHasOptionsMenu(true)
@@ -41,5 +43,26 @@ class ComercioFragment : Fragment()
     {
         inflater.inflate(R.menu.menu_save,menu)
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    //ejecutar eventos dentro del menu
+    override fun onOptionsItemSelected(item: MenuItem): Boolean
+    {
+        return when(item.itemId)
+        {
+            android.R.id.home -> {
+                //code de la fecha de retroceso
+                mActivity?.onBackPressed()
+                true
+            }
+
+            R.id.action_save -> {
+                //code para el boton save
+                Snackbar.make(mBinding.root,getString(R.string.comercio_save),Snackbar.LENGTH_SHORT).show()
+                true
+            }
+
+            else -> return super.onOptionsItemSelected(item)
+        }
     }
 }
