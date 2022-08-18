@@ -83,7 +83,7 @@ class ComercioFragment : Fragment()
                                             direccion = mBinding.ietDireccion.text.toString().trim())
 
                 doAsync {
-                    ComercioApplication.database.ComercioDao().insertDB(comercio)
+                    comercio.productoId=ComercioApplication.database.ComercioDao().insertDB(comercio)
 
                     uiThread {
 
