@@ -1,7 +1,10 @@
 package pe.idat
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
@@ -14,6 +17,8 @@ class ComercioFragment : Fragment()
 {
     private lateinit var mBinding: FragmentComercioBinding
     private var mActivity:MainActivity?=null
+
+    lateinit var mAdapter:ComercioAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -81,7 +86,16 @@ class ComercioFragment : Fragment()
                     ComercioApplication.database.ComercioDao().insertDB(comercio)
 
                     uiThread {
+
+                        //mAdapter?.insertMemory(comercio)
+                        mActivity?.insertMemory(comercio)
+
+                        hidekeyboard()
+
                         Snackbar.make(mBinding.root,getString(R.string.comercio_save),Snackbar.LENGTH_SHORT).show()
+
+                        //volver al principal
+                        mActivity?.onBackPressed()
                     }
                 }
                 true
@@ -89,6 +103,13 @@ class ComercioFragment : Fragment()
 
             else -> return super.onOptionsItemSelected(item)
         }
+    }
+
+    //no funciona
+    //se ejecuta antes del onDestroy
+    override fun onDestroyView() {
+        hidekeyboard() //no hace el efecto
+        super.onDestroyView()
     }
 
     //cerrar correctamente el fragmento
@@ -102,5 +123,17 @@ class ComercioFragment : Fragment()
         setHasOptionsMenu(false)
 
         super.onDestroy()
+    }
+
+    //metodos para ocultar teclado
+    @SuppressLint("UseRequireInsteadOfGet")
+    private fun hidekeyboard()
+    {
+        val imm=mActivity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+        if(view!=null)
+        {
+            imm.hideSoftInputFromWindow(view!!.windowToken,0)
+        }
     }
 }

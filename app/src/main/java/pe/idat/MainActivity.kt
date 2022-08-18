@@ -7,7 +7,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import pe.idat.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity(), OnClickListener
+class MainActivity : AppCompatActivity(), OnClickListener, MainAux
 {
     lateinit var mBinding:ActivityMainBinding
     private lateinit var mAdapter:ComercioAdapter
@@ -115,5 +115,9 @@ class MainActivity : AppCompatActivity(), OnClickListener
 
         //ocultar boton flotante
         mBinding.fabComercio.hide()
+    }
+
+    override fun insertMemory(comercioEntity: ComercioEntity) {
+        mAdapter.insertMemory(comercioEntity)
     }
 }
