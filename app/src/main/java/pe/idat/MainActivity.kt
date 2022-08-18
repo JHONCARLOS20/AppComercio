@@ -9,7 +9,7 @@ import pe.idat.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), OnClickListener
 {
-    private lateinit var mBinding:ActivityMainBinding
+    public lateinit var mBinding:ActivityMainBinding
     private lateinit var mAdapter:ComercioAdapter
     private lateinit var mGridLayout:GridLayoutManager
 

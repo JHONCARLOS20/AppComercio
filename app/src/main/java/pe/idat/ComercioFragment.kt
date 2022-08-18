@@ -65,4 +65,17 @@ class ComercioFragment : Fragment()
             else -> return super.onOptionsItemSelected(item)
         }
     }
+
+    //cerrar correctamente el fragmento
+    override fun onDestroy()
+    {
+        mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        mActivity?.supportActionBar?.title=getString(R.string.app_name)
+
+        mActivity?.mBinding?.fabComercio?.show()
+
+        setHasOptionsMenu(false)
+
+        super.onDestroy()
+    }
 }
