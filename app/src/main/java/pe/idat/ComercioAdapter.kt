@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import pe.idat.databinding.ItemComercioBinding
 
 class ComercioAdapter(private var comercios:MutableList<ComercioEntity>,
@@ -61,6 +63,13 @@ class ComercioAdapter(private var comercios:MutableList<ComercioEntity>,
 
             //pintar favorite
             binding.cbFavorite.isChecked=comercio.isFavorite
+
+            //pintar imagen
+            Glide.with(mContext)
+                 .load(comercio.photoUrl)
+                 .diskCacheStrategy(DiskCacheStrategy.ALL)
+                 .centerCrop()
+                 .into(binding.imgPhoto)
         }
     }
 

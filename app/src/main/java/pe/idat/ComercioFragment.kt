@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.snackbar.Snackbar
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -53,6 +56,12 @@ class ComercioFragment : Fragment()
 
         //acceso al menu
         setHasOptionsMenu(true)
+
+        //configurar para insertar imagenes
+        mBinding.ietPhotoUrl.addTextChangedListener {
+            Glide.with(this).load(mBinding.ietPhotoUrl.text.toString())
+                .diskCacheStrategy(DiskCacheStrategy.ALL).centerCrop().into(mBinding.imgComercio)
+        }
     }
 
     //lamar al menu al momento de empezar la actividad
@@ -80,7 +89,8 @@ class ComercioFragment : Fragment()
                                             precio = mBinding.ietprice.text.toString().trim(),
                                             cantidad = mBinding.ietCantidad.text.toString().trim(),
                                             telefono = mBinding.ietPhone.text.toString().trim(),
-                                            direccion = mBinding.ietDireccion.text.toString().trim())
+                                            direccion = mBinding.ietDireccion.text.toString().trim(),
+                                            photoUrl = mBinding.ietPhotoUrl.text.toString().trim())
 
                 doAsync {
                     comercio.productoId=ComercioApplication.database.ComercioDao().insertDB(comercio)
