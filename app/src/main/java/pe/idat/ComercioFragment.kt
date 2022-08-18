@@ -21,7 +21,10 @@ class ComercioFragment : Fragment()
     private lateinit var mBinding: FragmentComercioBinding
     private var mActivity:MainActivity?=null
 
-    lateinit var mAdapter:ComercioAdapter
+    private var mIsEditComercioMode:Boolean=false
+    private var mComercioEntity:ComercioEntity?=null
+
+    //lateinit var mAdapter:ComercioAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,14 +36,41 @@ class ComercioFragment : Fragment()
     }
 
     //representa el ciclo de vida del fragmento
+    @SuppressLint("UseRequireInsteadOfGet")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?)
     {
         super.onViewCreated(view, savedInstanceState)
 
         val productoId=arguments?.getLong("keyId",0)
 
-        if(productoId!= null && productoId!=0L){
-            Toast.makeText(activity,productoId.toString(),Toast.LENGTH_SHORT).show()
+        if(productoId!= null && productoId!=0L)
+        {
+            mIsEditComercioMode=true
+
+            doAsync {
+                mComercioEntity=ComercioApplication.database.ComercioDao().findByIdDB(productoId.toInt())
+                uiThread {
+                    with(mBinding)
+                    {
+                        ietName.setText(mComercioEntity?.nombre)
+                        ietprice.setText(mComercioEntity?.precio)
+                        ietCantidad.setText(mComercioEntity?.cantidad)
+                        ietPhone.setText(mComercioEntity?.telefono)
+                        ietDireccion.setText(mComercioEntity?.direccion)
+                        ietPhotoUrl.setText(mComercioEntity?.photoUrl)
+
+                        /*
+                        Glide.with(activity!!)
+                            .load(mComercioEntity?.photoUrl)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .centerCrop()
+                            .into(imgComercio)
+                            */
+                    }
+                }
+            }
+
+            //Toast.makeText(activity,productoId.toString(),Toast.LENGTH_SHORT).show()
         }
         else {
             Toast.makeText(activity,productoId.toString(),Toast.LENGTH_SHORT).show()
