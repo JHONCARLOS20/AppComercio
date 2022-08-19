@@ -12,8 +12,10 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputLayout
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import org.w3c.dom.Text
 import pe.idat.databinding.FragmentComercioBinding
 
 //Escenario para el diseño de la vista Registrar y Editar
@@ -113,27 +115,27 @@ class ComercioFragment : Fragment()
         }
 
         mBinding.ietName.addTextChangedListener {
-            //code...
+            validateOther(mBinding.tilName)
         }
 
         mBinding.ietprice.addTextChangedListener {
-            //code...
+            validateOther(mBinding.tilprice)
         }
 
         mBinding.ietCantidad.addTextChangedListener {
-            //code...
+            validateOther(mBinding.tilCantidad)
         }
 
         mBinding.ietPhone.addTextChangedListener {
-            //code...
+            validateOther(mBinding.tilPhone)
         }
 
         mBinding.ietDireccion.addTextChangedListener {
-            //code...
+            validateOther(mBinding.tilDireccion)
         }
 
         mBinding.ietPhotoUrl.addTextChangedListener {
-            //code...
+            validateOther(mBinding.tilPhotoUrl)
         }
     }
 
@@ -157,7 +159,8 @@ class ComercioFragment : Fragment()
 
             R.id.action_save -> {
 
-                if(validate())
+                //si no hay nada de que validar
+                if(validateOther(mBinding.tilPhotoUrl, mBinding.tilDireccion, mBinding.tilPhone, mBinding.tilCantidad, mBinding.tilprice, mBinding.tilName))
                 {
                     //code para el boton save
                     val comercio=ComercioEntity(nombre = mBinding.ietName.text.toString().trim(),
@@ -334,5 +337,25 @@ class ComercioFragment : Fragment()
         return isValid
     }
 
+    //otra forma de validar
+    private fun validateOther(vararg txtArray:TextInputLayout):Boolean
+    {
+        var isValid=true
 
+        for(txt in txtArray)
+        {
+            if(txt.editText?.text.toString().trim().isEmpty())
+            {
+                txt.error=getString(R.string.helper_required)
+                txt.editText?.requestFocus()
+                isValid=false
+            }
+            else
+            {
+                txt.error=null
+            }
+        }
+
+        return isValid
+    }
 }
