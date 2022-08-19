@@ -111,6 +111,30 @@ class ComercioFragment : Fragment()
             Glide.with(this).load(mBinding.ietPhotoUrl.text.toString())
                 .diskCacheStrategy(DiskCacheStrategy.ALL).centerCrop().into(mBinding.imgComercio)
         }
+
+        mBinding.ietName.addTextChangedListener {
+            //code...
+        }
+
+        mBinding.ietprice.addTextChangedListener {
+            //code...
+        }
+
+        mBinding.ietCantidad.addTextChangedListener {
+            //code...
+        }
+
+        mBinding.ietPhone.addTextChangedListener {
+            //code...
+        }
+
+        mBinding.ietDireccion.addTextChangedListener {
+            //code...
+        }
+
+        mBinding.ietPhotoUrl.addTextChangedListener {
+            //code...
+        }
     }
 
     //lamar al menu al momento de empezar la actividad
@@ -240,12 +264,22 @@ class ComercioFragment : Fragment()
                 mBinding.ietPhotoUrl.requestFocus()
                 isValid=false
             }
+            else
+            {
+                //quitar borde rojo
+                mBinding.tilPhotoUrl.error=null
+            }
 
             if(ietDireccion.text.toString().trim().isEmpty())
             {
                 mBinding.tilDireccion.error=getString(R.string.helper_required)
                 mBinding.ietDireccion.requestFocus()
                 isValid=false
+            }
+            else
+            {
+                //quitar borde rojo
+                mBinding.tilDireccion.error=null
             }
 
             if(ietPhone.text.toString().trim().isEmpty())
@@ -254,12 +288,22 @@ class ComercioFragment : Fragment()
                 mBinding.ietPhone.requestFocus()
                 isValid=false
             }
+            else
+            {
+                //quitar borde rojo
+                mBinding.tilPhone.error=null
+            }
 
             if(ietCantidad.text.toString().trim().isEmpty())
             {
                 mBinding.tilCantidad.error=getString(R.string.helper_required)
                 mBinding.ietCantidad.requestFocus()
                 isValid=false
+            }
+            else
+            {
+                //quitar borde rojo
+                mBinding.tilCantidad.error=null
             }
 
             if(ietprice.text.toString().trim().isEmpty())
@@ -268,6 +312,11 @@ class ComercioFragment : Fragment()
                 mBinding.ietprice.requestFocus()
                 isValid=false
             }
+            else
+            {
+                //quitar borde rojo
+                mBinding.tilprice.error=null
+            }
 
             if(ietName.text.toString().trim().isEmpty())
             {
@@ -275,8 +324,15 @@ class ComercioFragment : Fragment()
                 mBinding.ietName.requestFocus()
                 isValid=false
             }
+            else
+            {
+                //quitar borde rojo
+                mBinding.tilName.error=null
+            }
         }
 
         return isValid
     }
+
+
 }
