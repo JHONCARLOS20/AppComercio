@@ -6,13 +6,21 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import pe.idat.ComercioApplication
 import pe.idat.common.entities.ComercioEntity
+import pe.idat.mainModule.model.MainInteractor
 
+//ViewModel
 class MainViewModel: ViewModel()
 {
     //reflejar datos de la vista
     private var comercios:MutableLiveData<List<ComercioEntity>>
 
+    //reflejar datos del model
+    private var interactor:MainInteractor
+
+    //bloque de inicializacion
     init {
+        interactor= MainInteractor()
+
         comercios= MutableLiveData() //inicializar
         loadcomercios() //cargar
     }
@@ -25,6 +33,7 @@ class MainViewModel: ViewModel()
 
     private fun loadcomercios()
     {
+        /*
         //ejecutar hilo (cargar colección)
         doAsync {
             val comercioDB= ComercioApplication.database.ComercioDao().findAllDB()
@@ -32,6 +41,12 @@ class MainViewModel: ViewModel()
             uiThread {
                 comercios.value=comercioDB
             }
-        }
+        } */
+
+        interactor.getComerciosCallback(object:MainInteractor.ComerciosCallback{
+            override fun getComerciosCallback(comercios: MutableList<ComercioEntity>) {
+                this@MainViewModel.comercios.value=comercios
+            }
+        })
     }
 }

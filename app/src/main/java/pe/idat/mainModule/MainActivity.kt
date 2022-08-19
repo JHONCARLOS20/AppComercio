@@ -20,6 +20,7 @@ import pe.idat.mainModule.adapter.ComercioAdapter
 import pe.idat.mainModule.adapter.OnClickListener
 import pe.idat.mainModule.viewModel.MainViewModel
 
+//View
 class MainActivity : AppCompatActivity(), OnClickListener, MainAux
 {
     lateinit var mBinding:ActivityMainBinding
