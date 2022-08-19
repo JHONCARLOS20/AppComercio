@@ -132,51 +132,54 @@ class ComercioFragment : Fragment()
             }
 
             R.id.action_save -> {
-                //code para el boton save
 
-                val comercio=ComercioEntity(nombre = mBinding.ietName.text.toString().trim(),
-                                            precio = mBinding.ietprice.text.toString().trim(),
-                                            cantidad = mBinding.ietCantidad.text.toString().trim(),
-                                            telefono = mBinding.ietPhone.text.toString().trim(),
-                                            direccion = mBinding.ietDireccion.text.toString().trim(),
-                                            photoUrl = mBinding.ietPhotoUrl.text.toString().trim())
+                if(validate())
+                {
+                    //code para el boton save
+                    val comercio=ComercioEntity(nombre = mBinding.ietName.text.toString().trim(),
+                        precio = mBinding.ietprice.text.toString().trim(),
+                        cantidad = mBinding.ietCantidad.text.toString().trim(),
+                        telefono = mBinding.ietPhone.text.toString().trim(),
+                        direccion = mBinding.ietDireccion.text.toString().trim(),
+                        photoUrl = mBinding.ietPhotoUrl.text.toString().trim())
 
-                doAsync {
-
-                    if(mIsEditComercioMode)
-                    {
-                        //editar
-                        comercio.productoId=mComercioEntity!!.productoId
-
-                        ComercioApplication.database.ComercioDao().updateDB(comercio)
-                    }
-                    else
-                    {
-                        //registrar
-                        comercio.productoId=ComercioApplication.database.ComercioDao().insertDB(comercio)
-                    }
-
-                    uiThread {
-
-                        hidekeyboard()
+                    doAsync {
 
                         if(mIsEditComercioMode)
                         {
-                            mActivity?.updateMemory(comercio)
+                            //editar
+                            comercio.productoId=mComercioEntity!!.productoId
 
-                            Snackbar.make(mBinding.root,getString(R.string.comercio_update),Snackbar.LENGTH_SHORT).show()
+                            ComercioApplication.database.ComercioDao().updateDB(comercio)
                         }
                         else
                         {
-                            //mAdapter?.insertMemory(comercio)
-                            mActivity?.insertMemory(comercio)
+                            //registrar
+                            comercio.productoId=ComercioApplication.database.ComercioDao().insertDB(comercio)
+                        }
+
+                        uiThread {
+
+                            hidekeyboard()
+
+                            if(mIsEditComercioMode)
+                            {
+                                mActivity?.updateMemory(comercio)
+
+                                Snackbar.make(mBinding.root,getString(R.string.comercio_update),Snackbar.LENGTH_SHORT).show()
+                            }
+                            else
+                            {
+                                //mAdapter?.insertMemory(comercio)
+                                mActivity?.insertMemory(comercio)
 
 
 
-                            Snackbar.make(mBinding.root,getString(R.string.comercio_save),Snackbar.LENGTH_SHORT).show()
+                                Snackbar.make(mBinding.root,getString(R.string.comercio_save),Snackbar.LENGTH_SHORT).show()
 
-                            //volver al principal
-                            mActivity?.onBackPressed()
+                                //volver al principal
+                                mActivity?.onBackPressed()
+                            }
                         }
                     }
                 }
@@ -222,5 +225,58 @@ class ComercioFragment : Fragment()
     //buenas practicas
     private fun String.editable(): Editable {
         return Editable.Factory.getInstance().newEditable(this)
+    }
+
+    //validar formulario
+    private fun validate():Boolean
+    {
+        var isValid=true
+
+        with(mBinding)
+        {
+            if(ietPhotoUrl.text.toString().trim().isEmpty())
+            {
+                mBinding.tilPhotoUrl.error=getString(R.string.helper_required)
+                mBinding.ietPhotoUrl.requestFocus()
+                isValid=false
+            }
+
+            if(ietDireccion.text.toString().trim().isEmpty())
+            {
+                mBinding.tilDireccion.error=getString(R.string.helper_required)
+                mBinding.ietDireccion.requestFocus()
+                isValid=false
+            }
+
+            if(ietPhone.text.toString().trim().isEmpty())
+            {
+                mBinding.tilPhone.error=getString(R.string.helper_required)
+                mBinding.ietPhone.requestFocus()
+                isValid=false
+            }
+
+            if(ietCantidad.text.toString().trim().isEmpty())
+            {
+                mBinding.tilCantidad.error=getString(R.string.helper_required)
+                mBinding.ietCantidad.requestFocus()
+                isValid=false
+            }
+
+            if(ietprice.text.toString().trim().isEmpty())
+            {
+                mBinding.tilprice.error=getString(R.string.helper_required)
+                mBinding.ietprice.requestFocus()
+                isValid=false
+            }
+
+            if(ietName.text.toString().trim().isEmpty())
+            {
+                mBinding.tilName.error=getString(R.string.helper_required)
+                mBinding.ietName.requestFocus()
+                isValid=false
+            }
+        }
+
+        return isValid
     }
 }
