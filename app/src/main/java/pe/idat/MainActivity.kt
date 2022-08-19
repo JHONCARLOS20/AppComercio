@@ -1,8 +1,10 @@
 package pe.idat
 
+import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import pe.idat.databinding.ActivityMainBinding
@@ -83,13 +85,23 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux
 
     override fun onClickDelete(comercioEntity: ComercioEntity)
     {
-        doAsync {
-            ComercioApplication.database.ComercioDao().deleteDB(comercioEntity)
+        //ventana de dialogo
+        MaterialAlertDialogBuilder(this)
+            .setTitle("¿Eliminar Plato?")
+            .setPositiveButton("Eliminar",
+        DialogInterface.OnClickListener { dialogInterface, i ->
 
-            uiThread {
-                mAdapter.deleteMemory(comercioEntity)
+            //Yes
+            //procede con la eliminacion
+            doAsync {
+                ComercioApplication.database.ComercioDao().deleteDB(comercioEntity)
+
+                uiThread {
+                    mAdapter.deleteMemory(comercioEntity)
+                }
             }
-        }
+        })
+            .setNegativeButton("Cancelar",null).show()
     }
 
     //Lanzar Fragmento
