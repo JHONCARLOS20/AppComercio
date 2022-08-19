@@ -1,5 +1,6 @@
 package pe.idat.mainModule.viewModel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.jetbrains.anko.doAsync
@@ -12,7 +13,7 @@ import pe.idat.mainModule.model.MainInteractor
 class MainViewModel: ViewModel()
 {
     //reflejar datos de la vista
-    private var comercios:MutableLiveData<List<ComercioEntity>>
+    //private var comercios:MutableLiveData<List<ComercioEntity>>
 
     //reflejar datos del model
     private var interactor:MainInteractor
@@ -21,12 +22,19 @@ class MainViewModel: ViewModel()
     init {
         interactor= MainInteractor()
 
-        comercios= MutableLiveData() //inicializar
+        //comercios= MutableLiveData() //inicializar
         loadcomercios() //cargar
     }
 
+    //inicializacion por lazy
+    private val comercios:MutableLiveData<List<ComercioEntity>> by lazy {
+        MutableLiveData<List<ComercioEntity>>().also {
+            loadcomercios()
+        }
+    }
+
     //encapsulando
-    fun getComercios():MutableLiveData<List<ComercioEntity>>
+    fun getComercios(): LiveData<List<ComercioEntity>>
     {
         return comercios
     }
