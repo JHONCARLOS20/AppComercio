@@ -56,8 +56,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_Cantidad"
+            android:inputType="textMultiLine"
+            android:textAppearance="?attr/textAppearanceCaption"
+            android:maxLines="@integer/liner_url_photo"
+            android:minLines="@integer/liner_url_photo"
             android:layout_marginTop="@dimen/common_padding_default"
-            app:startIconDrawable="@drawable/ic_cantidad"
+            app:startIconDrawable="@drawable/ic_link_url"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText

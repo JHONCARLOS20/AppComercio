@@ -1,6 +1,8 @@
 package pe.idat
 
 import android.content.DialogInterface
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -96,8 +98,8 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux
 
                 when(i) {
                     0 -> confirmarDelete(comercioEntity)
-                    1 -> Toast.makeText(this,"Llamar...",Toast.LENGTH_LONG).show()
-                    2 -> Toast.makeText(this,"Sitio web...",Toast.LENGTH_LONG).show()
+                    1 -> callPhone(comercioEntity.telefono)
+                    2 -> goToWebsite(comercioEntity.cantidad)
                 }
             }).show()
     }
@@ -153,5 +155,27 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux
                     }
                 })
             .setNegativeButton("Cancelar",null).show()
+    }
+
+    private fun callPhone(phone:String)
+    {
+        val call=Intent().apply {
+            action=Intent.ACTION_DIAL //accion de llamar a telefonos
+            data=Uri.parse("tel:$phone") //data del numero que se quiere llamar
+        }
+
+        //realizar la actividad de llamadas
+        startActivity(call)
+    }
+
+    private fun goToWebsite(website:String)
+    {
+        val call=Intent().apply {
+            action=Intent.ACTION_VIEW //accion de llamar a vistas
+            data=Uri.parse(website) //data website que se quiere marcar
+        }
+
+        //realizar la actividad de llamadas
+        startActivity(call)
     }
 }
