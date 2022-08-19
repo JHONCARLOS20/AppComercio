@@ -21,7 +21,7 @@ import pe.idat.mainModule.adapter.OnClickListener
 import pe.idat.mainModule.viewModel.MainViewModel
 
 //View
-class MainActivity : AppCompatActivity(), OnClickListener, MainAux
+class MainActivity : AppCompatActivity(), OnClickListener //, MainAux
 {
     lateinit var mBinding:ActivityMainBinding
     private lateinit var mAdapter: ComercioAdapter
@@ -148,13 +148,14 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux
         mBinding.fabComercio.hide()
     }
 
-    override fun insertMemory(comercioEntity: ComercioEntity) {
+    /*override fun insertMemory(comercioEntity: ComercioEntity) {
         mAdapter.insertMemory(comercioEntity)
-    }
+    }*/
 
-    override fun updateMemory(comercioEntity: ComercioEntity) {
+    /*override fun updateMemory(comercioEntity: ComercioEntity) {
         mAdapter.updateMemory(comercioEntity)
-    }
+    }*/
+
     private fun confirmarDelete(comercioEntity: ComercioEntity)
     {
         //ventana de dialogo

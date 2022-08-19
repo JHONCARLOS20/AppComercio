@@ -211,14 +211,14 @@ class ComercioFragment : Fragment()
 
                             if(mIsEditComercioMode)
                             {
-                                mActivity?.updateMemory(comercio)
+                                //mActivity?.updateMemory(comercio)
 
                                 Snackbar.make(mBinding.root,getString(R.string.comercio_update),Snackbar.LENGTH_SHORT).show()
                             }
                             else
                             {
                                 //mAdapter?.insertMemory(comercio)
-                                mActivity?.insertMemory(comercio)
+                                //mActivity?.insertMemory(comercio)
 
 
 
