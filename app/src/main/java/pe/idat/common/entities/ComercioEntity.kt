@@ -1,4 +1,4 @@
-package pe.idat
+package pe.idat.common.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

@@ -1,4 +1,6 @@
-package pe.idat
+package pe.idat.common.utils
+
+import pe.idat.common.entities.ComercioEntity
 
 interface MainAux
 {

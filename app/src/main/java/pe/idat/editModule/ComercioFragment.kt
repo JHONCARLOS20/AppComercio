@@ -1,4 +1,4 @@
-package pe.idat
+package pe.idat.editModule
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -15,17 +14,20 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
-import org.w3c.dom.Text
+import pe.idat.ComercioApplication
+import pe.idat.mainModule.MainActivity
+import pe.idat.R
+import pe.idat.common.entities.ComercioEntity
 import pe.idat.databinding.FragmentComercioBinding
 
 //Escenario para el diseño de la vista Registrar y Editar
 class ComercioFragment : Fragment()
 {
     private lateinit var mBinding: FragmentComercioBinding
-    private var mActivity:MainActivity?=null
+    private var mActivity: MainActivity?=null
 
     private var mIsEditComercioMode:Boolean=false
-    private var mComercioEntity:ComercioEntity?=null
+    private var mComercioEntity: ComercioEntity?=null
 
     //lateinit var mAdapter:ComercioAdapter
 
@@ -52,7 +54,7 @@ class ComercioFragment : Fragment()
             mIsEditComercioMode=true
 
             doAsync {
-                mComercioEntity=ComercioApplication.database.ComercioDao().findByIdDB(productoId.toInt())
+                mComercioEntity= ComercioApplication.database.ComercioDao().findByIdDB(productoId.toInt())
                 uiThread {
                     with(mBinding)
                     {
@@ -181,7 +183,7 @@ class ComercioFragment : Fragment()
                 if(validateOther(mBinding.tilPhotoUrl, mBinding.tilDireccion, mBinding.tilPhone, mBinding.tilCantidad, mBinding.tilprice, mBinding.tilName))
                 {
                     //code para el boton save
-                    val comercio=ComercioEntity(nombre = mBinding.ietName.text.toString().trim(),
+                    val comercio= ComercioEntity(nombre = mBinding.ietName.text.toString().trim(),
                         precio = mBinding.ietprice.text.toString().trim(),
                         cantidad = mBinding.ietCantidad.text.toString().trim(),
                         telefono = mBinding.ietPhone.text.toString().trim(),
@@ -200,7 +202,7 @@ class ComercioFragment : Fragment()
                         else
                         {
                             //registrar
-                            comercio.productoId=ComercioApplication.database.ComercioDao().insertDB(comercio)
+                            comercio.productoId= ComercioApplication.database.ComercioDao().insertDB(comercio)
                         }
 
                         uiThread {

@@ -1,21 +1,27 @@
-package pe.idat
+package pe.idat.mainModule
 
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import pe.idat.ComercioApplication
+import pe.idat.R
+import pe.idat.common.entities.ComercioEntity
+import pe.idat.common.utils.MainAux
 import pe.idat.databinding.ActivityMainBinding
+import pe.idat.editModule.ComercioFragment
+import pe.idat.mainModule.adapter.ComercioAdapter
+import pe.idat.mainModule.adapter.OnClickListener
 
 class MainActivity : AppCompatActivity(), OnClickListener, MainAux
 {
     lateinit var mBinding:ActivityMainBinding
-    private lateinit var mAdapter:ComercioAdapter
+    private lateinit var mAdapter: ComercioAdapter
     private lateinit var mGridLayout:GridLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?)
@@ -46,12 +52,12 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux
         }
 
         //configurar el RecyclerView
-        mAdapter=ComercioAdapter(mutableListOf(),this)
+        mAdapter= ComercioAdapter(mutableListOf(),this)
         mGridLayout=GridLayoutManager(this,2)
 
         //ejecutar hilo (cargar colección)
         doAsync {
-            val comercioDB=ComercioApplication.database.ComercioDao().findAllDB()
+            val comercioDB= ComercioApplication.database.ComercioDao().findAllDB()
 
             uiThread {
                 mAdapter.setCollection(comercioDB)
@@ -107,7 +113,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux
     //Lanzar Fragmento
     private fun launchFragment(bundle: Bundle?=null)
     {
-        val fragment=ComercioFragment()
+        val fragment= ComercioFragment()
 
         if(bundle!=null){
             fragment.arguments=bundle

@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import pe.idat.common.database.ComercioDatabase
 
 class ComercioApplication: Application()
 {
@@ -24,7 +25,7 @@ class ComercioApplication: Application()
 
         //cargar database
         database=Room
-            .databaseBuilder(this,ComercioDatabase::class.java,"ComercioDatabase")
+            .databaseBuilder(this, ComercioDatabase::class.java,"ComercioDatabase")
             .addMigrations(MIGRATION_1_2)
             .build()
     }

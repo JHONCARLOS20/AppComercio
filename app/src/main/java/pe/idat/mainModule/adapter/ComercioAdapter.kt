@@ -1,4 +1,4 @@
-package pe.idat
+package pe.idat.mainModule.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,10 +7,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import pe.idat.R
+import pe.idat.common.entities.ComercioEntity
 import pe.idat.databinding.ItemComercioBinding
 
 class ComercioAdapter(private var comercios:MutableList<ComercioEntity>,
-                      private var listener:OnClickListener): RecyclerView.Adapter<ComercioAdapter.ViewHolder>()
+                      private var listener: OnClickListener
+): RecyclerView.Adapter<ComercioAdapter.ViewHolder>()
 {
     private lateinit var mContext:Context
 
@@ -21,7 +24,7 @@ class ComercioAdapter(private var comercios:MutableList<ComercioEntity>,
         val binding=ItemComercioBinding.bind(view)
 
         //función que recibe un comercio
-        fun setListener(comercioEntity:ComercioEntity)
+        fun setListener(comercioEntity: ComercioEntity)
         {
             //clik normal -> evento onClick
             binding.root.setOnClickListener {
@@ -83,7 +86,7 @@ class ComercioAdapter(private var comercios:MutableList<ComercioEntity>,
         notifyDataSetChanged() //refrescar los cambios
     }
 
-    fun insertMemory(comercioEntity:ComercioEntity)
+    fun insertMemory(comercioEntity: ComercioEntity)
     {
         comercios.add(comercioEntity)
         notifyDataSetChanged()

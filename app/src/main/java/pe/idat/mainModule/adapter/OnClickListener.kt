@@ -1,4 +1,6 @@
-package pe.idat
+package pe.idat.mainModule.adapter
+
+import pe.idat.common.entities.ComercioEntity
 
 interface OnClickListener
 {
