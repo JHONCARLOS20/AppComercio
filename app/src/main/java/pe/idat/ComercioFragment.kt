@@ -135,7 +135,23 @@ class ComercioFragment : Fragment()
         }
 
         mBinding.ietPhotoUrl.addTextChangedListener {
-            validateOther(mBinding.tilPhotoUrl)
+            //validateOther(mBinding.tilPhotoUrl)
+
+            //codigo para mostrar imagen por defecto si no hay contenido
+            //code...
+
+            if(validateOther(mBinding.tilPhotoUrl))
+            {
+                Glide.with(this)
+                    .load(mBinding.ietPhotoUrl.text.toString())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .centerCrop()
+                    .into(mBinding.imgComercio)
+            }
+            else
+            {
+                mBinding.imgComercio.setImageResource(R.drawable.ic_imagen)
+            }
         }
     }
 
