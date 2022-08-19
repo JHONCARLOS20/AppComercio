@@ -3,6 +3,7 @@ package pe.idat
 import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.jetbrains.anko.doAsync
@@ -85,23 +86,20 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux
 
     override fun onClickDelete(comercioEntity: ComercioEntity)
     {
-        //ventana de dialogo
+        //opciones
+        val items= arrayOf("Eliminar","Llamar","Ir al sitio web")
+
+        //ventana de dialogo como menu
         MaterialAlertDialogBuilder(this)
-            .setTitle("¿Eliminar Plato?")
-            .setPositiveButton("Eliminar",
-        DialogInterface.OnClickListener { dialogInterface, i ->
+            .setTitle("¿Que deseas Hacer?")
+            .setItems(items,DialogInterface.OnClickListener { dialogInterface, i ->
 
-            //Yes
-            //procede con la eliminacion
-            doAsync {
-                ComercioApplication.database.ComercioDao().deleteDB(comercioEntity)
-
-                uiThread {
-                    mAdapter.deleteMemory(comercioEntity)
+                when(i) {
+                    0 -> confirmarDelete(comercioEntity)
+                    1 -> Toast.makeText(this,"Llamar...",Toast.LENGTH_LONG).show()
+                    2 -> Toast.makeText(this,"Sitio web...",Toast.LENGTH_LONG).show()
                 }
-            }
-        })
-            .setNegativeButton("Cancelar",null).show()
+            }).show()
     }
 
     //Lanzar Fragmento
@@ -135,5 +133,25 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux
 
     override fun updateMemory(comercioEntity: ComercioEntity) {
         mAdapter.updateMemory(comercioEntity)
+    }
+    private fun confirmarDelete(comercioEntity: ComercioEntity)
+    {
+        //ventana de dialogo
+        MaterialAlertDialogBuilder(this)
+            .setTitle("¿Eliminar Plato?")
+            .setPositiveButton("Eliminar",
+                DialogInterface.OnClickListener { dialogInterface, i ->
+
+                    //Yes
+                    //procede con la eliminacion
+                    doAsync {
+                        ComercioApplication.database.ComercioDao().deleteDB(comercioEntity)
+
+                        uiThread {
+                            mAdapter.deleteMemory(comercioEntity)
+                        }
+                    }
+                })
+            .setNegativeButton("Cancelar",null).show()
     }
 }

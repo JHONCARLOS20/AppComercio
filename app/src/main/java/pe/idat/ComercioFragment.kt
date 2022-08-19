@@ -111,10 +111,10 @@ class ComercioFragment : Fragment()
         actionBar()
 
         //configurar para insertar imagenes
-        mBinding.ietPhotoUrl.addTextChangedListener {
+        /*mBinding.ietPhotoUrl.addTextChangedListener {
             Glide.with(this).load(mBinding.ietPhotoUrl.text.toString())
                 .diskCacheStrategy(DiskCacheStrategy.ALL).centerCrop().into(mBinding.imgComercio)
-        }
+        }*/
 
         mBinding.ietName.addTextChangedListener {
             validateOther(mBinding.tilName)
