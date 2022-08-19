@@ -97,16 +97,18 @@ class ComercioFragment : Fragment()
             //Toast.makeText(activity,productoId.toString(),Toast.LENGTH_SHORT).show()
         }
 
-        mActivity = activity as? MainActivity
+        //mActivity = activity as? MainActivity
 
         //mostrar flecha de retroceso
-        mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        //mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         //mostrar titulo
-        mActivity?.supportActionBar?.title=getString(R.string.comercio_title_add)
+        //mActivity?.supportActionBar?.title=getString(R.string.comercio_title_add)
 
         //acceso al menu
-        setHasOptionsMenu(true)
+        //setHasOptionsMenu(true)
+
+        actionBar()
 
         //configurar para insertar imagenes
         mBinding.ietPhotoUrl.addTextChangedListener {
@@ -373,5 +375,25 @@ class ComercioFragment : Fragment()
         }
 
         return isValid
+    }
+
+    private fun actionBar()
+    {
+        mActivity=activity as? MainActivity
+        mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        //titulo segun la accion
+        mActivity?.supportActionBar?.title=
+            if(mIsEditComercioMode)
+            {
+                getString(R.string.title_edit)
+            }
+            else
+            {
+                getString(R.string.comercio_title_add)
+            }
+
+        setHasOptionsMenu(true)
+
     }
 }
