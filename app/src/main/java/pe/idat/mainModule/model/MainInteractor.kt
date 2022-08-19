@@ -1,5 +1,6 @@
 package pe.idat.mainModule.model
 
+import androidx.lifecycle.MutableLiveData
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import pe.idat.ComercioApplication
@@ -22,6 +23,19 @@ class MainInteractor
             uiThread {
                 //respuesta para el ViewModel
                 callback.getComerciosCallback(comercioDB)
+            }
+        }
+    }
+
+    fun getComercios(callback:(MutableList<ComercioEntity>) -> Unit)
+    {
+        //ejecutar hilo (cargar colección)
+        doAsync {
+            val comercioDB= ComercioApplication.database.ComercioDao().findAllDB()
+
+            uiThread {
+                //respuesta para el ViewModel
+                callback(comercioDB)
             }
         }
     }

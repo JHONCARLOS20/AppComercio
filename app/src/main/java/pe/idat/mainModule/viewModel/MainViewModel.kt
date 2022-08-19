@@ -51,10 +51,15 @@ class MainViewModel: ViewModel()
             }
         } */
 
+        /*
         interactor.getComerciosCallback(object:MainInteractor.ComerciosCallback{
             override fun getComerciosCallback(comercios: MutableList<ComercioEntity>) {
                 this@MainViewModel.comercios.value=comercios
             }
-        })
+        })*/
+
+        interactor.getComercios {
+            comercios.value=it
+        }
     }
 }
