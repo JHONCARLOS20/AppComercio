@@ -80,9 +80,16 @@ class ComercioAdapter(private var comercios:MutableList<ComercioEntity>,
         return comercios.size
     }
 
+    /*
     fun setCollection(comerciosDB:MutableList<ComercioEntity>)
     {
         this.comercios=comerciosDB
+        notifyDataSetChanged() //refrescar los cambios
+    } */
+
+    fun setCollection(comercios:List<ComercioEntity>)
+    {
+        this.comercios=comercios as MutableList<ComercioEntity>
         notifyDataSetChanged() //refrescar los cambios
     }
 
