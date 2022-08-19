@@ -120,4 +120,8 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux
     override fun insertMemory(comercioEntity: ComercioEntity) {
         mAdapter.insertMemory(comercioEntity)
     }
+
+    override fun updateMemory(comercioEntity: ComercioEntity) {
+        mAdapter.updateMemory(comercioEntity)
+    }
 }

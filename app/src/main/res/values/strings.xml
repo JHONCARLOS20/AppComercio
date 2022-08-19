@@ -14,4 +14,5 @@
     <string name="comercio_title_add">Crear Plato</string>
     <string name="menu_save">Save</string>
     <string name="comercio_save">¡Plato Registrado Exitosamente!</string>
+    <string name="comercio_update">¡Plato Actualizado Exitosamente!</string>
 </resources>

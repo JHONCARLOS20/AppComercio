@@ -46,6 +46,7 @@ class ComercioFragment : Fragment()
 
         if(productoId!= null && productoId!=0L)
         {
+            //modo registrar
             mIsEditComercioMode=true
 
             doAsync {
@@ -83,8 +84,15 @@ class ComercioFragment : Fragment()
 
             //Toast.makeText(activity,productoId.toString(),Toast.LENGTH_SHORT).show()
         }
-        else {
-            Toast.makeText(activity,productoId.toString(),Toast.LENGTH_SHORT).show()
+        else
+        {
+            //modo registrar
+            mIsEditComercioMode=false
+
+            //inicializar
+            mComercioEntity= ComercioEntity(nombre = "", precio = "", cantidad = "", telefono = "", direccion = "", photoUrl = "")
+
+            //Toast.makeText(activity,productoId.toString(),Toast.LENGTH_SHORT).show()
         }
 
         mActivity = activity as? MainActivity
@@ -134,19 +142,42 @@ class ComercioFragment : Fragment()
                                             photoUrl = mBinding.ietPhotoUrl.text.toString().trim())
 
                 doAsync {
-                    comercio.productoId=ComercioApplication.database.ComercioDao().insertDB(comercio)
+
+                    if(mIsEditComercioMode)
+                    {
+                        //editar
+                        comercio.productoId=mComercioEntity!!.productoId
+
+                        ComercioApplication.database.ComercioDao().updateDB(comercio)
+                    }
+                    else
+                    {
+                        //registrar
+                        comercio.productoId=ComercioApplication.database.ComercioDao().insertDB(comercio)
+                    }
 
                     uiThread {
 
-                        //mAdapter?.insertMemory(comercio)
-                        mActivity?.insertMemory(comercio)
-
                         hidekeyboard()
 
-                        Snackbar.make(mBinding.root,getString(R.string.comercio_save),Snackbar.LENGTH_SHORT).show()
+                        if(mIsEditComercioMode)
+                        {
+                            mActivity?.updateMemory(comercio)
 
-                        //volver al principal
-                        mActivity?.onBackPressed()
+                            Snackbar.make(mBinding.root,getString(R.string.comercio_update),Snackbar.LENGTH_SHORT).show()
+                        }
+                        else
+                        {
+                            //mAdapter?.insertMemory(comercio)
+                            mActivity?.insertMemory(comercio)
+
+
+
+                            Snackbar.make(mBinding.root,getString(R.string.comercio_save),Snackbar.LENGTH_SHORT).show()
+
+                            //volver al principal
+                            mActivity?.onBackPressed()
+                        }
                     }
                 }
                 true
