@@ -18,9 +18,12 @@ class MainViewModel: ViewModel()
     //reflejar datos del model
     private var interactor:MainInteractor
 
+    private var comercioList:MutableList<ComercioEntity>
+
     //bloque de inicializacion
     init {
         interactor= MainInteractor()
+        comercioList= mutableListOf()
 
         //comercios= MutableLiveData() //inicializar
         loadcomercios() //cargar
@@ -60,6 +63,35 @@ class MainViewModel: ViewModel()
 
         interactor.getComercios {
             comercios.value=it
+            comercioList=it
         }
+    }
+
+    fun deleteComercio(comercioEntity: ComercioEntity)
+    {
+        interactor.deleteComercio(comercioEntity, {
+            val index=comercioList.indexOf(comercioEntity)
+
+            if(index!=-1)
+            {
+                comercioList.removeAt(index)
+                comercios.value=comercioList
+            }
+        })
+    }
+
+    fun updateComercio(comercioEntity: ComercioEntity)
+    {
+        comercioEntity.isFavorite=!comercioEntity.isFavorite
+
+        interactor.updateComercio(comercioEntity, {
+            val index=comercioList.indexOf(comercioEntity)
+
+            if(index!=-1)
+            {
+                comercioList.set(index,comercioEntity)
+                comercios.value=comercioList
+            }
+        })
     }
 }

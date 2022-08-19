@@ -91,15 +91,18 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux
 
     override fun onClickFavorite(comercioEntity: ComercioEntity)
     {
-        comercioEntity.isFavorite=!comercioEntity.isFavorite
+        //comercioEntity.isFavorite=!comercioEntity.isFavorite
 
+        /*
         doAsync {
             ComercioApplication.database.ComercioDao().updateDB(comercioEntity)
 
             uiThread {
                 mAdapter.updateMemory(comercioEntity)
             }
-        }
+        } */
+
+        mMainViewModel.updateComercio(comercioEntity)
     }
 
     override fun onClickDelete(comercioEntity: ComercioEntity)
@@ -160,7 +163,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux
             .setPositiveButton("Eliminar",
                 DialogInterface.OnClickListener { dialogInterface, i ->
 
-                    //Yes
+                    /* //Yes
                     //procede con la eliminacion
                     doAsync {
                         ComercioApplication.database.ComercioDao().deleteDB(comercioEntity)
@@ -168,7 +171,9 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux
                         uiThread {
                             mAdapter.deleteMemory(comercioEntity)
                         }
-                    }
+                    } */
+
+                    mMainViewModel.deleteComercio(comercioEntity)
                 })
             .setNegativeButton("Cancelar",null).show()
     }

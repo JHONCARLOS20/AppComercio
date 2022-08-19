@@ -8,11 +8,13 @@ import pe.idat.common.entities.ComercioEntity
 
 class MainInteractor
 {
+    /*
     //definimos un interfaz
     interface ComerciosCallback {
         fun getComerciosCallback(comercios:MutableList<ComercioEntity>)
-    }
+    } */
 
+    /*
     //funcion para el ViewModel
     fun getComerciosCallback(callback:ComerciosCallback)
     {
@@ -25,7 +27,7 @@ class MainInteractor
                 callback.getComerciosCallback(comercioDB)
             }
         }
-    }
+    } */
 
     fun getComercios(callback:(MutableList<ComercioEntity>) -> Unit)
     {
@@ -36,6 +38,29 @@ class MainInteractor
             uiThread {
                 //respuesta para el ViewModel
                 callback(comercioDB)
+            }
+        }
+    }
+
+    fun deleteComercio(comercioEntity:ComercioEntity, callback:(ComercioEntity) -> Unit)
+    {
+        //procede con la eliminacion
+        doAsync {
+            ComercioApplication.database.ComercioDao().deleteDB(comercioEntity)
+
+            uiThread {
+                callback(comercioEntity)
+            }
+        }
+    }
+
+    fun updateComercio(comercioEntity:ComercioEntity, callback:(ComercioEntity) -> Unit)
+    {
+        doAsync {
+            ComercioApplication.database.ComercioDao().updateDB(comercioEntity)
+
+            uiThread {
+                callback(comercioEntity)
             }
         }
     }
