@@ -93,13 +93,25 @@ class ComercioAdapter(private var comercios:MutableList<ComercioEntity>,
         notifyDataSetChanged() //refrescar los cambios
     }
 
-    fun insertMemory(comercioEntity: ComercioEntity)
+    //insert or update
+    fun saveMemory(comercioEntity: ComercioEntity)
     {
-        comercios.add(comercioEntity)
-        notifyDataSetChanged()
+        if(comercioEntity.productoId!=0L)
+        {
+            //si comercio no existe en la lista de platos
+            if(!comercios.contains(comercioEntity))
+            {
+                comercios.add(comercioEntity)
+                notifyItemInserted(comercios.size-1)
+            }
+            else
+            {
+                updateMemory(comercioEntity)
+            }
+        }
     }
 
-    fun updateMemory(comercioEntity: ComercioEntity)
+    private fun updateMemory(comercioEntity: ComercioEntity)
     {
         val index=comercios.indexOf(comercioEntity)
 
@@ -110,7 +122,7 @@ class ComercioAdapter(private var comercios:MutableList<ComercioEntity>,
         }
     }
 
-    fun deleteMemory(comercioEntity: ComercioEntity)
+    /*fun deleteMemory(comercioEntity: ComercioEntity)
     {
         val index=comercios.indexOf(comercioEntity)
 
@@ -119,5 +131,5 @@ class ComercioAdapter(private var comercios:MutableList<ComercioEntity>,
             comercios.removeAt(index)
             notifyItemRemoved(index) //refrescar los cambios
         }
-    }
+    }*/
 }

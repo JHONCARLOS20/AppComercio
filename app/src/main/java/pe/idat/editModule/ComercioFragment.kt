@@ -6,8 +6,11 @@ import android.os.Bundle
 import android.text.Editable
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.snackbar.Snackbar
@@ -19,6 +22,7 @@ import pe.idat.mainModule.MainActivity
 import pe.idat.R
 import pe.idat.common.entities.ComercioEntity
 import pe.idat.databinding.FragmentComercioBinding
+import pe.idat.editModule.viewModel.ComercioViewModel
 
 //Escenario para el diseño de la vista Registrar y Editar
 class ComercioFragment : Fragment()
@@ -28,6 +32,16 @@ class ComercioFragment : Fragment()
 
     private var mIsEditComercioMode:Boolean=false
     private var mComercioEntity: ComercioEntity?=null
+
+    //MVVM
+    private lateinit var mComercioViewModel:ComercioViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        //inicializando
+        mComercioViewModel=ViewModelProvider(requireActivity()).get(ComercioViewModel::class.java)
+    }
 
     //lateinit var mAdapter:ComercioAdapter
 
@@ -46,8 +60,9 @@ class ComercioFragment : Fragment()
     {
         super.onViewCreated(view, savedInstanceState)
 
-        val productoId=arguments?.getLong("keyId",0)
+        //val productoId=arguments?.getLong("keyId",0)
 
+        /*
         if(productoId!= null && productoId!=0L)
         {
             //modo registrar
@@ -97,26 +112,18 @@ class ComercioFragment : Fragment()
             mComercioEntity= ComercioEntity(nombre = "", precio = "", cantidad = "", telefono = "", direccion = "", photoUrl = "")
 
             //Toast.makeText(activity,productoId.toString(),Toast.LENGTH_SHORT).show()
-        }
+        } */
 
-        //mActivity = activity as? MainActivity
-
-        //mostrar flecha de retroceso
-        //mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        //mostrar titulo
-        //mActivity?.supportActionBar?.title=getString(R.string.comercio_title_add)
-
-        //acceso al menu
-        //setHasOptionsMenu(true)
-
-        actionBar()
+        //actionBar()
 
         //configurar para insertar imagenes
         /*mBinding.ietPhotoUrl.addTextChangedListener {
             Glide.with(this).load(mBinding.ietPhotoUrl.text.toString())
                 .diskCacheStrategy(DiskCacheStrategy.ALL).centerCrop().into(mBinding.imgComercio)
         }*/
+
+        //llamar
+        setupViewModel()
 
         mBinding.ietName.addTextChangedListener {
             validateOther(mBinding.tilName)
@@ -190,44 +197,17 @@ class ComercioFragment : Fragment()
                         direccion = mBinding.ietDireccion.text.toString().trim(),
                         photoUrl = mBinding.ietPhotoUrl.text.toString().trim())
 
-                    doAsync {
+                    if(mIsEditComercioMode)
+                    {
+                        //editar
+                        comercio.productoId=mComercioEntity!!.productoId
 
-                        if(mIsEditComercioMode)
-                        {
-                            //editar
-                            comercio.productoId=mComercioEntity!!.productoId
-
-                            ComercioApplication.database.ComercioDao().updateDB(comercio)
-                        }
-                        else
-                        {
-                            //registrar
-                            comercio.productoId= ComercioApplication.database.ComercioDao().insertDB(comercio)
-                        }
-
-                        uiThread {
-
-                            hidekeyboard()
-
-                            if(mIsEditComercioMode)
-                            {
-                                //mActivity?.updateMemory(comercio)
-
-                                Snackbar.make(mBinding.root,getString(R.string.comercio_update),Snackbar.LENGTH_SHORT).show()
-                            }
-                            else
-                            {
-                                //mAdapter?.insertMemory(comercio)
-                                //mActivity?.insertMemory(comercio)
-
-
-
-                                Snackbar.make(mBinding.root,getString(R.string.comercio_save),Snackbar.LENGTH_SHORT).show()
-
-                                //volver al principal
-                                mActivity?.onBackPressed()
-                            }
-                        }
+                        mComercioViewModel.updateComercio(comercio)
+                    }
+                    else
+                    {
+                        //registrar
+                        mComercioViewModel.saveComercio(comercio)
                     }
                 }
                 true
@@ -250,7 +230,10 @@ class ComercioFragment : Fragment()
         mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
         mActivity?.supportActionBar?.title=getString(R.string.app_name)
 
-        mActivity?.mBinding?.fabComercio?.show()
+        //mActivity?.mBinding?.fabComercio?.show()
+        mComercioViewModel.setShowFab(true) //visualizar
+
+        mComercioViewModel.setResult(Any())
 
         setHasOptionsMenu(false)
 
@@ -397,5 +380,75 @@ class ComercioFragment : Fragment()
 
         setHasOptionsMenu(true)
 
+    }
+
+    private fun setupViewModel()
+    {
+        mComercioViewModel.getComercioSelected().observe(viewLifecycleOwner,{
+            mComercioEntity=it
+
+            if(it.productoId!=0L)
+            {
+                mIsEditComercioMode=true //modo Editar
+
+                with(mBinding)
+                {
+                    ietName.text=it?.nombre?.editable()
+                    ietprice.text=it?.precio?.editable()
+                    ietCantidad.text=it?.cantidad?.editable()
+                    ietPhone.text=it?.telefono?.editable()
+                    ietDireccion.text=it?.direccion?.editable()
+                    ietPhotoUrl.text=it?.photoUrl?.editable()
+                }
+            }
+            else
+            {
+                mIsEditComercioMode=false //modo Registrar
+            }
+
+            mActivity = activity as? MainActivity
+
+            //mostrar flecha de retroceso
+            mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+            //mostrar titulo
+            mActivity?.supportActionBar?.title=getString(R.string.comercio_title_add)
+
+            //acceso al menu
+            setHasOptionsMenu(true)
+
+            //titutlo segun la accion
+            mActivity?.supportActionBar?.title=
+                if(mIsEditComercioMode)
+                {
+                    getString(R.string.title_edit)
+                }
+                else
+                {
+                    getString(R.string.comercio_title_add)
+                }
+        })
+
+        mComercioViewModel.getResult().observe(viewLifecycleOwner,{result->
+            hidekeyboard()
+
+            when(result)
+            {
+                //registrar
+                is Long -> {
+                    mComercioEntity!!.productoId=result
+                    mComercioViewModel.setComercioSelected(mComercioEntity!!)
+
+                    Toast.makeText(mActivity,R.string.comercio_save,Toast.LENGTH_SHORT).show()
+                    mActivity?.onBackPressed()
+                }
+
+                //editar
+                is ComercioEntity -> {
+                    mComercioViewModel.setComercioSelected(mComercioEntity!!)
+                    Toast.makeText(mActivity,R.string.comercio_update,Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
     }
 }

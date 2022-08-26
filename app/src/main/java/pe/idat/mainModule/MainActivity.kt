@@ -16,6 +16,7 @@ import pe.idat.common.entities.ComercioEntity
 import pe.idat.common.utils.MainAux
 import pe.idat.databinding.ActivityMainBinding
 import pe.idat.editModule.ComercioFragment
+import pe.idat.editModule.viewModel.ComercioViewModel
 import pe.idat.mainModule.adapter.ComercioAdapter
 import pe.idat.mainModule.adapter.OnClickListener
 import pe.idat.mainModule.viewModel.MainViewModel
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity(), OnClickListener //, MainAux
 
     //usando patron MVVM
     private lateinit var mMainViewModel:MainViewModel
+    private lateinit var mComercioViewModel:ComercioViewModel
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -83,10 +85,7 @@ class MainActivity : AppCompatActivity(), OnClickListener //, MainAux
 
     override fun onClick(comercioEntity: ComercioEntity)
     {
-        val bundle=Bundle()
-        bundle.putLong("keyId",comercioEntity.productoId)
-
-        launchFragment(bundle)
+        launchFragment(comercioEntity)
     }
 
     override fun onClickFavorite(comercioEntity: ComercioEntity)
@@ -123,14 +122,12 @@ class MainActivity : AppCompatActivity(), OnClickListener //, MainAux
             }).show()
     }
 
-    //Lanzar Fragmento
-    private fun launchFragment(bundle: Bundle?=null)
+    //Lanzar Fragmento MVVM
+    private fun launchFragment(comercioEntity: ComercioEntity= ComercioEntity())
     {
         val fragment= ComercioFragment()
 
-        if(bundle!=null){
-            fragment.arguments=bundle
-        }
+        mComercioViewModel.setComercioSelected(comercioEntity)
 
         val fragmentManager=supportFragmentManager
         val fragmentTransaction=fragmentManager.beginTransaction()
@@ -145,7 +142,7 @@ class MainActivity : AppCompatActivity(), OnClickListener //, MainAux
         fragmentTransaction.commit()
 
         //ocultar boton flotante
-        mBinding.fabComercio.hide()
+        mComercioViewModel.setShowFab(false)
     }
 
     /*override fun insertMemory(comercioEntity: ComercioEntity) {
@@ -209,6 +206,28 @@ class MainActivity : AppCompatActivity(), OnClickListener //, MainAux
 
         mMainViewModel.getComercios().observe(this,{comercios ->
             mAdapter.setCollection(comercios) //cargamos al adaptador
+        })
+
+        //inicializado
+        mComercioViewModel=ViewModelProvider(this).get(ComercioViewModel::class.java)
+
+        //visualizacion
+        mComercioViewModel.getShowFab().observe(this,{isVisible->
+            if(isVisible)
+            {
+                //mostrar fab
+                mBinding.fabComercio.show()
+            }
+            else
+            {
+                //ocultar fab
+                mBinding.fabComercio.hide()
+            }
+        })
+
+        //funcionamiento en memoria
+        mComercioViewModel.getComercioSelected().observe(this,{comercioEntity->
+            mAdapter.saveMemory(comercioEntity)
         })
     }
 }
