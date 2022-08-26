@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -206,6 +207,18 @@ class MainActivity : AppCompatActivity(), OnClickListener //, MainAux
 
         mMainViewModel.getComercios().observe(this,{comercios ->
             mAdapter.setCollection(comercios) //cargamos al adaptador
+
+            //uso de ProgressBar
+            mBinding.progressBar.visibility=
+                if(comercios.size==0)
+                {
+                    View.VISIBLE
+                }
+                else
+                {
+                    View.GONE
+                }
+
         })
 
         //inicializado
