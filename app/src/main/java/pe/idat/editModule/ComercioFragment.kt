@@ -31,7 +31,7 @@ class ComercioFragment : Fragment()
     private var mActivity: MainActivity?=null
 
     private var mIsEditComercioMode:Boolean=false
-    private var mComercioEntity: ComercioEntity?=null
+    private lateinit var mComercioEntity:ComercioEntity
 
     //MVVM
     private lateinit var mComercioViewModel:ComercioViewModel
@@ -189,25 +189,34 @@ class ComercioFragment : Fragment()
                 //si no hay nada de que validar
                 if(validateOther(mBinding.tilPhotoUrl, mBinding.tilDireccion, mBinding.tilPhone, mBinding.tilCantidad, mBinding.tilprice, mBinding.tilName))
                 {
-                    //code para el boton save
+                    with(mComercioEntity)
+                    {
+                        nombre = mBinding.ietName.text.toString().trim()
+                        precio = mBinding.ietprice.text.toString().trim()
+                        cantidad = mBinding.ietCantidad.text.toString().trim()
+                        telefono = mBinding.ietPhone.text.toString().trim()
+                        direccion = mBinding.ietDireccion.text.toString().trim()
+                        photoUrl = mBinding.ietPhotoUrl.text.toString().trim()
+                    }
+
+                    /* //code para el boton save
                     val comercio= ComercioEntity(nombre = mBinding.ietName.text.toString().trim(),
                         precio = mBinding.ietprice.text.toString().trim(),
                         cantidad = mBinding.ietCantidad.text.toString().trim(),
                         telefono = mBinding.ietPhone.text.toString().trim(),
                         direccion = mBinding.ietDireccion.text.toString().trim(),
-                        photoUrl = mBinding.ietPhotoUrl.text.toString().trim())
+                        photoUrl = mBinding.ietPhotoUrl.text.toString().trim()) */
 
                     if(mIsEditComercioMode)
                     {
                         //editar
-                        comercio.productoId=mComercioEntity!!.productoId
 
-                        mComercioViewModel.updateComercio(comercio)
+                        mComercioViewModel.updateComercio(mComercioEntity)
                     }
                     else
                     {
                         //registrar
-                        mComercioViewModel.saveComercio(comercio)
+                        mComercioViewModel.saveComercio(mComercioEntity)
                     }
                 }
                 true
@@ -436,8 +445,8 @@ class ComercioFragment : Fragment()
             {
                 //registrar
                 is Long -> {
-                    mComercioEntity!!.productoId=result
-                    mComercioViewModel.setComercioSelected(mComercioEntity!!)
+                    mComercioEntity.productoId=result
+                    mComercioViewModel.setComercioSelected(mComercioEntity)
 
                     Toast.makeText(mActivity,R.string.comercio_save,Toast.LENGTH_SHORT).show()
                     mActivity?.onBackPressed()
@@ -445,7 +454,7 @@ class ComercioFragment : Fragment()
 
                 //editar
                 is ComercioEntity -> {
-                    mComercioViewModel.setComercioSelected(mComercioEntity!!)
+                    mComercioViewModel.setComercioSelected(mComercioEntity)
                     Toast.makeText(mActivity,R.string.comercio_update,Toast.LENGTH_SHORT).show()
                 }
             }

@@ -118,7 +118,7 @@ class ComercioAdapter(private var comercios:MutableList<ComercioEntity>,
         if(index!=-1)
         {
             comercios.set(index,comercioEntity)
-            notifyDataSetChanged()
+            notifyItemChanged(index)
         }
     }
 
