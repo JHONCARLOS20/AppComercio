@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import pe.idat.common.database.ComercioAPI
 import pe.idat.common.database.ComercioDatabase
 
 class ComercioApplication: Application()
@@ -11,6 +12,7 @@ class ComercioApplication: Application()
     //nos permite acceder al database desde cualquier punto (patrón singleton)
     companion object {
         lateinit var database: ComercioDatabase
+        lateinit var comercioAPI: ComercioAPI
     }
 
     override fun onCreate() {
@@ -28,5 +30,8 @@ class ComercioApplication: Application()
             .databaseBuilder(this, ComercioDatabase::class.java,"ComercioDatabase")
             .addMigrations(MIGRATION_1_2)
             .build()
+
+        //inicializando Volley
+        comercioAPI=ComercioAPI.getInstance(this)
     }
 }
